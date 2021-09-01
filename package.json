@@ -2,8 +2,12 @@
   "name": "webservices-budget",
   "version": "0.0.1",
   "license": "UNLICENSED",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
   "dependencies": {
-    "koa": "^2.13.4"
+    "koa": "^2.13.4",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
