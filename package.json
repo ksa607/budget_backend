@@ -1,0 +1,11 @@
+{
+  "name": "webservices-budget",
+  "version": "0.0.1",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "koa": "^2.13.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
