@@ -1,15 +1,9 @@
 const Koa = require('koa');
-const winston = require('winston');
+const { getLogger } = require('./src/core/logging')
 
 const app = new Koa();
+const logger = getLogger();
 
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.simple(),
-  transports: [
-    new winston.transports.Console({silent: false})
-  ]
-});
 
 app.use(async (ctx, next) => {
   ctx.body = 'Goodbye world';
