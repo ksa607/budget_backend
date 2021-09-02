@@ -1,5 +1,5 @@
 const Koa = require('koa');
-const { getLogger } = require('./src/core/logging')
+const { getLogger } = require('./core/logging')
 
 const app = new Koa();
 const logger = getLogger();
