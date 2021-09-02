@@ -2,6 +2,7 @@ const Koa = require('koa');
 const config = require('config');
 const { getLogger } = require('./core/logging')
 
+const NODE_ENV = config.get('env');
 const LOG_LEVEL = config.get('log.level');
 const LOG_DISABLED = config.get('log.disabled');
 
