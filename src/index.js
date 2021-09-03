@@ -13,7 +13,12 @@ const logger = getLogger();
 
 
 app.use(async (ctx, next) => {
-  ctx.body = 'Goodbye world';
+  logger.info(JSON.stringify(ctx.request));
+  if (ctx.request.method === 'GET' && ctx.request.url === "/api/transactions") {
+    ctx.body = "[{'user': 'Benjamin', 'amount': 100, 'place': 'Irish Pub', date: '2021-08-15' }]";
+  } else {
+    ctx.body = 'Goodbye world';
+  }
   next();
 });
 
