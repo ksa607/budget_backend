@@ -1,4 +1,5 @@
 const Koa = require('koa');
+const Router = require('@koa/router');
 const config = require('config');
 const { getLogger } = require('./core/logging');
 const bodyParser = require('koa-bodyparser');
@@ -15,16 +16,16 @@ const logger = getLogger();
 
 app.use(bodyParser());
 
-app.use(async (ctx, next) => {
+const router = new Router();
+
+router.get('/api/transactions', async (ctx) => {
   logger.info(JSON.stringify(ctx.request));
-  logger.info(JSON.stringify(ctx.request.body));
-  if (ctx.request.method === 'GET' && ctx.request.url === "/api/transactions") {
-    ctx.body = "[{'user': 'Benjamin', 'amount': 100, 'place': 'Irish Pub', date: '2021-08-15' }]";
-  } else {
-    ctx.body = 'Goodbye world';
-  }
-  next();
-});
+  ctx.body = "[{'user': 'Benjamin', 'amount': 100, 'place': 'Irish Pub', date: '2021-08-15' }]";
+})
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 logger.info(`🚀 Server listening on http://localhost:9000`);
 app.listen(9000);
