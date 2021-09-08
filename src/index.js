@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('@koa/router');
 const config = require('config');
 const { getLogger } = require('./core/logging');
+const transactionService = require('./service/transaction');
 const bodyParser = require('koa-bodyparser');
 
 const NODE_ENV = config.get('env');
@@ -20,7 +21,12 @@ const router = new Router();
 
 router.get('/api/transactions', async (ctx) => {
   logger.info(JSON.stringify(ctx.request));
-  ctx.body = "[{'user': 'Benjamin', 'amount': 100, 'place': 'Irish Pub', date: '2021-08-15' }]";
+  ctx.body = transactionService.getAll();
+})
+
+router.post('/api/transactions', async (ctx) => {
+  const newTransaction = transactionService.create({...ctx.request.body, date: new Date(ctx.request.body.date)});
+  ctx.body = newTransaction;
 })
 
 app
