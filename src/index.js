@@ -22,15 +22,24 @@ const router = new Router();
 router.get('/api/transactions', async (ctx) => {
   logger.info(JSON.stringify(ctx.request));
   ctx.body = transactionService.getAll();
-})
+});
 
 router.post('/api/transactions', async (ctx) => {
   const newTransaction = transactionService.create({...ctx.request.body, date: new Date(ctx.request.body.date)});
   ctx.body = newTransaction;
-})
+});
 
 router.get('/api/transactions/:id', async (ctx) => {
-  ctx.body = transactionService.getById(ctx.params.id);
+  ctx.body = transactionService.getById(Number(ctx.params.id));
+});
+
+router.put('/api/transactions/:id', async (ctx) => {
+  ctx.body = transactionService.updateById(Number(ctx.params.id), {...ctx.request.body, date: new Date(ctx.request.body.date) });
+});
+
+router.delete('/api/transactions/:id', async (ctx) => {
+  transactionService.deleteById(Number(ctx.params.id));
+  ctx.status = 204;
 })
 
 app
