@@ -4,6 +4,7 @@ let TRANSACTIONS = [{id: 1, user: 'Benjamin', amount: 100, place: 'Irish Pub', d
 
 const debugLog = (message, meta = {}) => {
   const logger = getLogger();
+  
   logger.debug(message, meta);
 }
 
