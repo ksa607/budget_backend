@@ -1,49 +1,68 @@
 const { getLogger } = require('../core/logging');
-let { PLACES } = require('../data/mock-data');
+const placeRepository = require('../repository/place');
 
 const debugLog = (message, meta = {}) => {
 	if (!this.logger) this.logger = getLogger();
 	this.logger.debug(message, meta);
 };
 
-const getAll = () => {
+/**
+ * Get all places.
+ */
+const getAll = async () => {
 	debugLog('Fetching all places');
-	return { items: PLACES, count: PLACES.length };
+	const items = await placeRepository.findAll();
+	const count = await placeRepository.findCount();
+	return { items, count };
 };
 
+/**
+ * Get the place with the given `id`.
+ *
+ * @param {string} id - Id of the place to get.
+ */
 const getById = (id) => {
 	debugLog(`Fetching place with id ${id}`);
-	return PLACES.filter((place) => place.id === id)[0];
+	return placeRepository.findById(id);
 };
 
-const create = ({ name, rating }) => {
-	const maxId = Math.max(...PLACES.map((place) => place.id));
-	const newPlace = {
-		id: maxId + 1,
-		name,
-		rating,
-	};
+/**
+ * Create a new place.
+ *
+ * @param {object} place - Place to create.
+ * @param {string} place.name - Name of the place.
+ * @param {number} [place.rating] - Rating of the place (between 1 and 5).
+ */
+const create = async ({ name, rating }) => {
+	const newPlace = { name, rating };
 	debugLog('Creating new place', newPlace);
-	PLACES = [...PLACES, newPlace];
-	return newPlace;
+	const id = await placeRepository.create(newPlace);
+	return getById(id);
 };
 
-const updateById = (id, { name, rating }) => {
-	debugLog(`Updating place with id ${id}`, { name, rating });
-	const index = PLACES.findIndex((place) => place.id === id);
-
-	if (index < 0) return null;
-
-	const place = PLACES[index];
-	place.rating = rating;
-	place.name = name;
-
-	return place;
+/**
+ * Update an existing place.
+ *
+ * @param {string} id - Id of the place to update.
+ * @param {object} place - Place to save.
+ * @param {string} [place.name] - Name of the place.
+ * @param {number} [place.rating] - Rating of the place (between 1 and 5).
+ */
+const updateById = async (id, { name, rating }) => {
+	const updatedPlace = { name, rating };
+	debugLog(`Updating place with id ${id}`, updatedPlace);
+	await placeRepository.updateById(id, updatedPlace);
+	return getById(id);
 };
 
-const deleteById = (id) => {
+/**
+ * Delete an existing place.
+ *
+ * @param {string} id - Id of the place to delete.
+ */
+const deleteById = async (id) => {
 	debugLog(`Deleting place with id ${id}`);
-	PLACES = PLACES.filter((place) => place.id !== id);
+	await placeRepository.deleteById(id);
 };
 
 module.exports = {
