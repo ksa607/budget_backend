@@ -1,83 +1,103 @@
 const { getLogger } = require('../core/logging');
-let { TRANSACTIONS, PLACES } = require('../data/mock-data');
+const transactionRepository = require('../repository/transaction');
+const userService = require('./user');
 
 const debugLog = (message, meta = {}) => {
 	if (!this.logger) this.logger = getLogger();
 	this.logger.debug(message, meta);
 };
 
-const getAll = () => {
+/**
+ * Get all transactions.
+ */
+const getAll = async () => {
 	debugLog('Fetching all transactions');
-	return { items: TRANSACTIONS, count: TRANSACTIONS.length };
-};
-
-const getById = (id) => {
-	debugLog(`Fetching transaction with id ${id}`);
-	return TRANSACTIONS.filter((transaction) => transaction.id === id)[0];
-};
-
-const create = ({ amount, date, placeId, user }) => {
-	if (placeId) {
-		const existingPlace = PLACES.find((place) => place.id === placeId);
-
-		if (!existingPlace) {
-			throw Error(`There is no place with id ${placeId}.`);
-		}
-	}
-
-	if (typeof user === 'string') {
-		user = {
-			id: Math.floor(Math.random() * 100000),
-			name: user
-		};
-	}
-
-	const maxId = Math.max(...TRANSACTIONS.map((transaction) => transaction.id));
-	const newTransaction = {
-		id: maxId + 1,
-		amount,
-		date: date.toISOString(),
-		place: PLACES.find((place) => place.id === placeId),
-		user,
+	const items = await transactionRepository.findAll();
+	const count = await transactionRepository.findCount();
+	return {
+		items,
+		count,
 	};
-	debugLog('Creating new transaction', newTransaction);
-	TRANSACTIONS = [...TRANSACTIONS, newTransaction];
-	return newTransaction;
 };
 
-const updateById = (id, { amount, date, placeId, userId }) => {
-	debugLog(`Updating transaction with id ${id}`, {
-		amount,
-		date,
-		placeId,
-		userId,
-	});
+/**
+ * Get the transaction with the given `id`.
+ *
+ * @param {number} id - Id of the transaction to find.
+ */
+const getById = async (id) => {
+	debugLog(`Fetching transaction with id ${id}`);
+	const transaction = await transactionRepository.findById(id);
 
-	if (placeId) {
-		const existingPlace = PLACES.find((place) => place.id === placeId);
-
-		if (!existingPlace) {
-			throw Error(`There is no place with id ${placeId}.`);
-		}
-	}
-	const index = TRANSACTIONS.findIndex((transaction) => transaction.id === id);
-
-	if (index < 0) return null;
-
-	const transaction = TRANSACTIONS[index];
-	transaction.amount = amount;
-	transaction.date = date.toISOString();
-	transaction.place = PLACES.find((place) => place.id === placeId);
-	if (userId) {
-		transaction.user = userId;
+	if (!transaction) {
+		throw new Error(`There is no transaction with id ${id}`);
 	}
 
 	return transaction;
 };
 
-const deleteById = (id) => {
+/**
+ * Create a new transaction, will create a new place if necessary.
+ *
+ * @param {object} transaction - The transaction to create.
+ * @param {number} transaction.amount - Amount deposited/withdrawn.
+ * @param {Date} transaction.date - Date of the transaction.
+ * @param {string} transaction.placeId - Id of the place the transaction happened.
+ * @param {string} transaction.user - Name of the user who did the transaction.
+ */
+const create = async ({ amount, date, placeId, user }) => {
+	debugLog('Creating new transaction', { amount, date, placeId, user });
+
+	// For now simply create a new user every time
+	const userId = await userService.register({ name: user });
+
+	const id = await transactionRepository.create({
+		amount,
+		date,
+		placeId,
+		userId,
+	});
+	return getById(id);
+};
+
+/**
+ * Update an existing transaction, will create a new place if necessary.
+ *
+ * @param {number} id - Id of the transaction to update.
+ * @param {object} transaction - The transaction data to save.
+ * @param {number} [transaction.amount] - Amount deposited/withdrawn.
+ * @param {Date} [transaction.date] - Date of the transaction.
+ * @param {string} [transaction.placeId] - Id of the place the transaction happened.
+ * @param {string} [transaction.user] - Name of the user who did the transaction.
+ */
+const updateById = async (id, { amount, date, placeId, user }) => {
+	debugLog(`Updating transaction with id ${id}`, {
+		amount,
+		date,
+		placeId,
+		user,
+	});
+
+	// For now simply create a new user every time
+	const userId = await userService.register({ name: user });
+
+ 	await transactionRepository.updateById(id, {
+		amount,
+		date,
+		placeId,
+		userId,
+	});
+	return getById(id);
+};
+
+/**
+ * Delete the transaction with the given `id`.
+ *
+ * @param {number} id - Id of the transaction to delete.
+ */
+const deleteById = async (id) => {
 	debugLog(`Deleting transaction with id ${id}`);
-	TRANSACTIONS = TRANSACTIONS.filter((transaction) => transaction.id !== id);
+	await transactionRepository.deleteById(id);
 };
 
 module.exports = {

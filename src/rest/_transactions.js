@@ -2,11 +2,11 @@ const Router = require('@koa/router');
 const transactionService = require('../service/transaction');
 
 const getAllTransactions = async (ctx) => {
-	ctx.body = transactionService.getAll();
+	ctx.body = await transactionService.getAll();
 };
 
 const createTransaction = async (ctx) => {
-	const newTransaction = transactionService.create({
+	const newTransaction = await transactionService.create({
 		...ctx.request.body,
 		placeId: new Date(ctx.request.body.placeId),
 		date: new Date(ctx.request.body.date),
@@ -15,11 +15,11 @@ const createTransaction = async (ctx) => {
 };
 
 const getTransactionById = async (ctx) => {
-	ctx.body = transactionService.getById(ctx.params.id);
+	ctx.body = await transactionService.getById(ctx.params.id);
 };
 
 const updateTransaction = async (ctx) => {
-	ctx.body = transactionService.updateById(ctx.params.id, {
+	ctx.body = await transactionService.updateById(ctx.params.id, {
 		...ctx.request.body,
 		placeId: new Date(ctx.request.body.placeId),
 		date: new Date(ctx.request.body.date),
@@ -27,7 +27,7 @@ const updateTransaction = async (ctx) => {
 };
 
 const deleteTransaction = async (ctx) => {
-	transactionService.deleteById(ctx.params.id);
+	await transactionService.deleteById(ctx.params.id);
 	ctx.status = 204;
 };
 
