@@ -1,32 +1,31 @@
-const supertest = require('supertest');
-const createServer = require('../../src/createServer');
-const { getKnex, tables } = require('../../src/data');
+const { withServer } = require('../helpers');
+const { tables } = require('../../src/data');
 
 const data = {
   transactions: [{
       id: 1,
       user_id: 1,
-      place_id: 1,
+      place_id: 10,
       amount: 3500,
       date: new Date(2021, 4, 25, 19, 40),
     },
     {
       id: 2,
       user_id: 1,
-      place_id: 1,
+      place_id: 10,
       amount: -220,
       date: new Date(2021, 4, 8, 20, 0),
     },
     {
       id: 3,
       user_id: 1,
-      place_id: 1,
+      place_id: 10,
       amount: -74,
       date: new Date(2021, 4, 21, 14, 30),
     },
   ],
   places: [{
-    id: 1,
+    id: 10,
     name: 'Test place',
     rating: 3,
   }],
@@ -42,32 +41,25 @@ const dataToDelete = {
     2,
     3,
   ],
-  places: [1],
+  places: [10],
   users: [1]
 };
 
-
 describe('Transactions', () => {
-  let server;
   let request;
   let knex;
 
-  beforeAll(async () => {
-    server = await createServer();
-    request = supertest(server.getApp().callback());
-    knex = getKnex();
-  });
-
-  afterAll(async () => {
-    await server.stop();
+  withServer(({ knex: k, request: r }) => {
+    knex = k;
+    request = r;
   });
 
   const url = '/api/transactions';
 
   describe('GET /api/transactions', () => {
     beforeAll(async () => {
-      await knex(tables.place).insert(data.places);
       await knex(tables.user).insert(data.users);
+      await knex(tables.place).insert(data.places);
       await knex(tables.transaction).insert(data.transactions);
     });
 
@@ -95,8 +87,8 @@ describe('Transactions', () => {
   describe('GET /api/transactions/:id', () => {
 
     beforeAll(async () => {
-      await knex(tables.place).insert(data.places);
       await knex(tables.user).insert(data.users);
+      await knex(tables.place).insert(data.places);
       await knex(tables.transaction).insert(data.transactions[0]);
     });
 
@@ -116,7 +108,7 @@ describe('Transactions', () => {
 
     test('it should 200 and return the requested transaction', async () => {
       const transactionId = data.transactions[0].id;
-      const response = await request.get(`${url}/${transactionId}`)
+      const response = await request.get(`${url}/${transactionId}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
@@ -126,7 +118,7 @@ describe('Transactions', () => {
           name: 'Test User',
         },
         place: {
-          id: 1,
+          id: 10,
           name: 'Test place',
         },
         amount: 3500,
@@ -152,7 +144,7 @@ describe('Transactions', () => {
       await knex(tables.place)
         .whereIn('id', dataToDelete.places)
         .delete();
-
+      
       await knex(tables.user)
         .whereIn('id', usersToDelete)
         .delete();
@@ -163,7 +155,7 @@ describe('Transactions', () => {
         .send({
           amount: 102,
           date: '2021-05-27T13:00:00.000Z',
-          placeId: 1,
+          placeId: 10,
           user: 'Test User'
         });
 
@@ -172,7 +164,7 @@ describe('Transactions', () => {
       expect(response.body.amount).toBe(102);
       expect(response.body.date).toBe('2021-05-27T13:00:00.000Z');
       expect(response.body.place).toEqual({
-        id: 1,
+        id: 10,
         name: 'Test place',
       });
       expect(response.body.user.id).toBeTruthy();
@@ -187,13 +179,13 @@ describe('Transactions', () => {
     const usersToDelete = [];
 
     beforeAll(async () => {
-      await knex(tables.place).insert(data.places);
       await knex(tables.user).insert(data.users);
+      await knex(tables.place).insert(data.places);
       await knex(tables.transaction).insert([{
         id: 4,
         amount: 102,
         date: new Date(2021, 4, 25, 19, 40),
-        place_id: 1,
+        place_id: 10,
         user_id: 1,
       }]);
     });
@@ -208,7 +200,7 @@ describe('Transactions', () => {
         .delete();
 
       await knex(tables.user)
-        .whereIn('id', [...dataToDelete.users, ...usersToDelete])
+        .whereIn('id', dataToDelete.users)
         .delete();
     });
 
@@ -217,7 +209,7 @@ describe('Transactions', () => {
         .send({
           amount: -125,
           date: '2021-05-27T13:00:00.000Z',
-          placeId: 1,
+          placeId: 10,
           user: 'Test User'
         });
 
@@ -226,7 +218,7 @@ describe('Transactions', () => {
       expect(response.body.amount).toBe(-125);
       expect(response.body.date).toBe('2021-05-27T13:00:00.000Z');
       expect(response.body.place).toEqual({
-        id: 1,
+        id: 10,
         name: 'Test place',
       });
       expect(response.body.user.name).toEqual('Test User');
@@ -239,14 +231,14 @@ describe('Transactions', () => {
   describe('DELETE /api/transactions/:id', () => {
 
     beforeAll(async () => {
-      await knex(tables.place).insert(data.places);
       await knex(tables.user).insert(data.users);
+      await knex(tables.place).insert(data.places);
 
       await knex(tables.transaction).insert([{
         id: 4,
         amount: 102,
         date: new Date(2021, 4, 25, 19, 40),
-        place_id: 1,
+        place_id: 10,
         user_id: 1,
       }]);
     });
@@ -255,6 +247,7 @@ describe('Transactions', () => {
       await knex(tables.place)
         .whereIn('id', dataToDelete.places)
         .delete();
+
       await knex(tables.user)
         .whereIn('id', dataToDelete.users)
         .delete();
