@@ -2,6 +2,7 @@ const Koa = require('koa');
 const config = require('config');
 const koaCors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
+const emoji = require('node-emoji');
 const { initializeLogger, getLogger } = require('./core/logging');
 const { initializeData, shutdownData } = require('./data');
 const installRest = require('./rest');
@@ -41,6 +42,32 @@ module.exports = async function createServer () {
 	const logger = getLogger();
 	
 	app.use(bodyParser());
+	app.use(async (ctx, next) => {
+		const logger = getLogger();
+		logger.info(`${emoji.get('fast_forward')} ${ctx.method} ${ctx.url}`);
+	
+		const getStatusEmoji = () => {
+			if (ctx.status >= 500) return emoji.get('skull');
+			if (ctx.status >= 400) return emoji.get('x');
+			if (ctx.status >= 300) return emoji.get('rocket');
+			if (ctx.status >= 200) return emoji.get('white_check_mark');
+			return emoji.get('rewind');
+		};
+	
+		try {
+			await next();
+	
+			logger.info(
+				`${getStatusEmoji()} ${ctx.method} ${ctx.status} ${ctx.url}`,
+			);
+		} catch (error) {
+			logger.error(`${emoji.get('x')} ${ctx.method} ${ctx.status} ${ctx.url}`, {
+				error,
+			});
+	
+			throw error;
+		}
+	});
 	
 	installRest(app);
 
