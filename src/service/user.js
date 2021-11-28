@@ -1,4 +1,5 @@
 const { getLogger } = require('../core/logging');
+const ServiceError = require('../core/serviceError');
 const userRepository = require('../repository/user');
 
 const debugLog = (message, meta = {}) => {
@@ -48,7 +49,7 @@ const getById = async (id) => {
   const user = await userRepository.findById(id);
 
   if (!user) {
-    throw new Error(`No user with id ${id} exists`, { id });
+    throw ServiceError.notFound(`No user with id ${id} exists`, { id });
   }
 
   return user;
@@ -84,7 +85,7 @@ const deleteById = async (id) => {
   const deleted = await userRepository.deleteById(id);
 
   if (!deleted) {
-    throw new Error(`No user with id ${id} exists`, { id });
+    throw ServiceError.notFound(`No user with id ${id} exists`, { id });
   }
 };
 

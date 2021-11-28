@@ -1,4 +1,5 @@
 const { getLogger } = require('../core/logging');
+const ServiceError = require('../core/serviceError');
 const transactionRepository = require('../repository/transaction');
 const userService = require('./user');
 
@@ -30,7 +31,7 @@ const getById = async (id) => {
 	const transaction = await transactionRepository.findById(id);
 
 	if (!transaction) {
-		throw new Error(`There is no transaction with id ${id}`);
+		throw ServiceError.notFound(`There is no transaction with id ${id}`, { id });
 	}
 
 	return transaction;
