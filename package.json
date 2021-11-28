@@ -31,6 +31,8 @@
     "knex": "^2.3.0",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.0",
     "supertest": "^6.1.6",
     "winston": "^3.3.3"
