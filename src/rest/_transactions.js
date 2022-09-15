@@ -12,6 +12,7 @@ const createTransaction = async (ctx) => {
 		date: new Date(ctx.request.body.date),
 	});
 	ctx.body = newTransaction;
+	ctx.status=201;
 };
 
 const getTransactionById = async (ctx) => {

@@ -12,8 +12,6 @@ module.exports = {
     host: 'localhost',
     port: 3306,
     name: 'budget',
-    username: 'root',
-    password: 'root',
   },
   cors: {
     origins: ['http://localhost:3000'],
