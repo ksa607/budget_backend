@@ -8,6 +8,7 @@ const getAllTransactions = async (ctx) => {
 const createTransaction = async (ctx) => {
 	const newTransaction = transactionService.create({
 		...ctx.request.body,
+		placeId: new Date(ctx.request.body.placeId),
 		date: new Date(ctx.request.body.date),
 	});
 	ctx.body = newTransaction;
@@ -20,6 +21,7 @@ const getTransactionById = async (ctx) => {
 const updateTransaction = async (ctx) => {
 	ctx.body = transactionService.updateById(ctx.params.id, {
 		...ctx.request.body,
+		placeId: new Date(ctx.request.body.placeId),
 		date: new Date(ctx.request.body.date),
 	});
 };
