@@ -1,60 +1,60 @@
 const Joi = require('joi');
 
 const JOI_OPTIONS = {
-	abortEarly: true,
-	allowUnknown: false,
-	context: true,
-	convert: true,
-	presence: 'required',
+  abortEarly: true,
+  allowUnknown: false,
+  context: true,
+  convert: true,
+  presence: 'required',
 };
 
 const cleanupJoiError = (error) => error.details.reduce((resultObj, {
-	message,
-	path,
-	type,
+  message,
+  path,
+  type,
 }) => {
-	const joinedPath = path.join('.') || 'value';
-	if (!resultObj[joinedPath]) {
-		resultObj[joinedPath] = [];
-	}
-	resultObj[joinedPath].push({
-		type,
-		message,
-	});
+  const joinedPath = path.join('.') || 'value';
+  if (!resultObj[joinedPath]) {
+    resultObj[joinedPath] = [];
+  }
+  resultObj[joinedPath].push({
+    type,
+    message,
+  });
 
-	return resultObj;
+  return resultObj;
 }, {});
 
 const validate = (schema) => {
-	if (!schema) {
-		schema = {
-			query: {},
-			body: {},
-			params: {}
-		};
-	}
+  if (!schema) {
+    schema = {
+      query: {},
+      body: {},
+      params: {},
+    };
+  }
 
-	return (ctx, next) => {
-		const errors = {};
-		if (schema.query) {
-			if (!Joi.isSchema(schema.query)) {
-				schema.query = Joi.object(schema.query);
-			}
+  return (ctx, next) => {
+    const errors = {};
+    if (schema.query) {
+      if (!Joi.isSchema(schema.query)) {
+        schema.query = Joi.object(schema.query);
+      }
 
-			const {
-				error: queryErrors,
-				value: queryValue,
-			} = schema.query.validate(
-				ctx.query,
-				JOI_OPTIONS,
-			);
+      const {
+        error: queryErrors,
+        value: queryValue,
+      } = schema.query.validate(
+        ctx.query,
+        JOI_OPTIONS,
+      );
 
-			if (queryErrors) {
-				errors.query = cleanupJoiError(queryErrors);
-			} else {
-				ctx.query = queryValue;
-			}
-		}
+      if (queryErrors) {
+        errors.query = cleanupJoiError(queryErrors);
+      } else {
+        ctx.query = queryValue;
+      }
+    }
 
     if (schema.body) {
       if (!Joi.isSchema(schema.body)) {
@@ -96,14 +96,14 @@ const validate = (schema) => {
       }
     }
 
-		if (Object.keys(errors).length) {
-			ctx.throw(400, 'Validation failed, check details for more information', {
-				code: 'VALIDATION_FAILED',
-				details: errors,
-			});
-		}
+    if (Object.keys(errors).length) {
+      ctx.throw(400, 'Validation failed, check details for more information', {
+        code: 'VALIDATION_FAILED',
+        details: errors,
+      });
+    }
 
-		return next();
-	};
+    return next();
+  };
 };
 module.exports = validate;

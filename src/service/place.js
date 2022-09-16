@@ -2,18 +2,18 @@ const { getLogger } = require('../core/logging');
 const placeRepository = require('../repository/place');
 
 const debugLog = (message, meta = {}) => {
-	if (!this.logger) this.logger = getLogger();
-	this.logger.debug(message, meta);
+  if (!this.logger) this.logger = getLogger();
+  this.logger.debug(message, meta);
 };
 
 /**
  * Get all places.
  */
 const getAll = async () => {
-	debugLog('Fetching all places');
-	const items = await placeRepository.findAll();
-	const count = await placeRepository.findCount();
-	return { items, count };
+  debugLog('Fetching all places');
+  const items = await placeRepository.findAll();
+  const count = await placeRepository.findCount();
+  return { items, count };
 };
 
 /**
@@ -22,8 +22,8 @@ const getAll = async () => {
  * @param {string} id - Id of the place to get.
  */
 const getById = (id) => {
-	debugLog(`Fetching place with id ${id}`);
-	return placeRepository.findById(id);
+  debugLog(`Fetching place with id ${id}`);
+  return placeRepository.findById(id);
 };
 
 /**
@@ -34,10 +34,10 @@ const getById = (id) => {
  * @param {number} [place.rating] - Rating of the place (between 1 and 5).
  */
 const create = async ({ name, rating }) => {
-	const newPlace = { name, rating };
-	debugLog('Creating new place', newPlace);
-	const id = await placeRepository.create(newPlace);
-	return getById(id);
+  const newPlace = { name, rating };
+  debugLog('Creating new place', newPlace);
+  const id = await placeRepository.create(newPlace);
+  return getById(id);
 };
 
 /**
@@ -49,10 +49,10 @@ const create = async ({ name, rating }) => {
  * @param {number} [place.rating] - Rating of the place (between 1 and 5).
  */
 const updateById = async (id, { name, rating }) => {
-	const updatedPlace = { name, rating };
-	debugLog(`Updating place with id ${id}`, updatedPlace);
-	await placeRepository.updateById(id, updatedPlace);
-	return getById(id);
+  const updatedPlace = { name, rating };
+  debugLog(`Updating place with id ${id}`, updatedPlace);
+  await placeRepository.updateById(id, updatedPlace);
+  return getById(id);
 };
 
 /**
@@ -61,14 +61,14 @@ const updateById = async (id, { name, rating }) => {
  * @param {string} id - Id of the place to delete.
  */
 const deleteById = async (id) => {
-	debugLog(`Deleting place with id ${id}`);
-	await placeRepository.deleteById(id);
+  debugLog(`Deleting place with id ${id}`);
+  await placeRepository.deleteById(id);
 };
 
 module.exports = {
-	getAll,
-	getById,
-	create,
-	updateById,
-	deleteById,
+  getAll,
+  getById,
+  create,
+  updateById,
+  deleteById,
 };

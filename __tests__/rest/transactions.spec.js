@@ -3,26 +3,26 @@ const { tables } = require('../../src/data');
 
 const data = {
   transactions: [{
-      id: 1,
-      user_id: 1,
-      place_id: 10,
-      amount: 3500,
-      date: new Date(2021, 4, 25, 19, 40),
-    },
-    {
-      id: 2,
-      user_id: 1,
-      place_id: 10,
-      amount: -220,
-      date: new Date(2021, 4, 8, 20, 0),
-    },
-    {
-      id: 3,
-      user_id: 1,
-      place_id: 10,
-      amount: -74,
-      date: new Date(2021, 4, 21, 14, 30),
-    },
+    id: 1,
+    user_id: 1,
+    place_id: 10,
+    amount: 3500,
+    date: new Date(2021, 4, 25, 19, 40),
+  },
+  {
+    id: 2,
+    user_id: 1,
+    place_id: 10,
+    amount: -220,
+    date: new Date(2021, 4, 8, 20, 0),
+  },
+  {
+    id: 3,
+    user_id: 1,
+    place_id: 10,
+    amount: -74,
+    date: new Date(2021, 4, 21, 14, 30),
+  },
   ],
   places: [{
     id: 10,
@@ -31,8 +31,8 @@ const data = {
   }],
   users: [{
     id: 1,
-    name: 'Test User'
-  }]
+    name: 'Test User',
+  }],
 };
 
 const dataToDelete = {
@@ -42,7 +42,7 @@ const dataToDelete = {
     3,
   ],
   places: [10],
-  users: [1]
+  users: [1],
 };
 
 describe('Transactions', () => {
@@ -125,7 +125,7 @@ describe('Transactions', () => {
         date: new Date(2021, 4, 25, 19, 40).toJSON(),
       });
     });
-  })
+  });
 
   describe('POST /api/transactions', () => {
 
@@ -156,7 +156,7 @@ describe('Transactions', () => {
           amount: 102,
           date: '2021-05-27T13:00:00.000Z',
           placeId: 10,
-          user: 'Test User'
+          user: 'Test User',
         });
 
       expect(response.status).toBe(201);
@@ -210,7 +210,7 @@ describe('Transactions', () => {
           amount: -125,
           date: '2021-05-27T13:00:00.000Z',
           placeId: 10,
-          user: 'Test User'
+          user: 'Test User',
         });
 
       expect(response.status).toBe(200);

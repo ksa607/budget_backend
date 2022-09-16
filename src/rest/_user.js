@@ -1,6 +1,8 @@
 const Joi = require('joi');
 const Router = require('@koa/router');
+
 const userService = require('../service/user');
+
 const validate = require('./_validation');
 
 const getAllUsers = async (ctx) => {

@@ -3,21 +3,21 @@ const { tables } = require('../../src/data');
 
 const data = {
   places: [{
-      id: 1,
-      name: 'Loon',
-      rating: 5
-    },
-    {
-      id: 2,
-      name: 'Benzine',
-      rating: 2
-    },
-    {
-      id: 3,
-      name: 'Irish pub',
-      rating: 4
-    }
-  ]
+    id: 1,
+    name: 'Loon',
+    rating: 5,
+  },
+  {
+    id: 2,
+    name: 'Benzine',
+    rating: 2,
+  },
+  {
+    id: 3,
+    name: 'Irish pub',
+    rating: 4,
+  },
+  ],
 };
 
 const dataToDelete = {
@@ -25,7 +25,7 @@ const dataToDelete = {
     1,
     2,
     3,
-  ]
+  ],
 };
 
 describe('Places', () => {

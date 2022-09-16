@@ -1,4 +1,5 @@
 const config = require('config');
+
 const { initializeData } = require('../src/data');
 const { initializeLogger } = require('../src/core/logging');
 

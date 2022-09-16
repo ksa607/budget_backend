@@ -53,7 +53,7 @@ module.exports.initializeLogger = ({
         silent: disabled,
       }),
       ...extraTransports,
-    ]
+    ],
   });
 
   logger.info(` Logger initialized with minimum log level ${level}`);

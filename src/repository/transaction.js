@@ -8,15 +8,15 @@ const SELECT_COLUMNS = [
 ];
 
 const formatTransaction = ({ place_id, place_name, user_id, user_name, ...rest }) => ({
-	...rest,
-	place: {
-		id: place_id,
-		name: place_name,
-	},
-	user: {
-		id: user_id,
-		name: user_name,
-	},
+  ...rest,
+  place: {
+    id: place_id,
+    name: place_name,
+  },
+  user: {
+    id: user_id,
+    name: user_name,
+  },
 });
 
 

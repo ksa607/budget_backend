@@ -3,8 +3,8 @@ const ServiceError = require('../core/serviceError');
 const userRepository = require('../repository/user');
 
 const debugLog = (message, meta = {}) => {
-	if (!this.logger) this.logger = getLogger();
-	this.logger.debug(message, meta);
+  if (!this.logger) this.logger = getLogger();
+  this.logger.debug(message, meta);
 };
 
 /**

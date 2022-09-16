@@ -1,17 +1,19 @@
 const Joi = require('joi');
 const Router = require('@koa/router');
+
 const placeService = require('../service/place');
+
 const validate = require('./_validation.js');
 
 const getAllPlaces = async (ctx) => {
-	ctx.body = await placeService.getAll();
+  ctx.body = await placeService.getAll();
 };
 getAllPlaces.validationScheme = null;
 
 const createPlace = async (ctx) => {
-	const newPlace = await placeService.create(ctx.request.body);
-	ctx.body = newPlace;
-	ctx.status = 201;
+  const newPlace = await placeService.create(ctx.request.body);
+  ctx.body = newPlace;
+  ctx.status = 201;
 };
 createPlace.validationScheme = {
   body: {
@@ -21,7 +23,7 @@ createPlace.validationScheme = {
 };
 
 const getPlaceById = async (ctx) => {
-	ctx.body = await placeService.getById(Number(ctx.params.id));
+  ctx.body = await placeService.getById(Number(ctx.params.id));
 };
 getPlaceById.validationScheme = {
   params: {
@@ -30,7 +32,7 @@ getPlaceById.validationScheme = {
 };
 
 const updatePlace = async (ctx) => {
-	ctx.body = await placeService.updateById(ctx.params.id, ctx.request.body);
+  ctx.body = await placeService.updateById(ctx.params.id, ctx.request.body);
 };
 updatePlace.validationScheme = {
   params: {
@@ -43,8 +45,8 @@ updatePlace.validationScheme = {
 };
 
 const deletePlace = async (ctx) => {
-	await placeService.deleteById(ctx.params.id);
-	ctx.status = 204;
+  await placeService.deleteById(ctx.params.id);
+  ctx.status = 204;
 };
 deletePlace.validationScheme = {
   params: {
@@ -58,15 +60,15 @@ deletePlace.validationScheme = {
  * @param {Router} app - The parent router.
  */
 module.exports = (app) => {
-	const router = new Router({
-		prefix: '/places',
-	});
+  const router = new Router({
+    prefix: '/places',
+  });
 
-	router.get('/', validate(getAllPlaces.validationScheme), getAllPlaces);
-	router.post('/', validate(createPlace.validationScheme), createPlace);
-	router.get('/:id', validate(getPlaceById.validationScheme), getPlaceById);
-	router.put('/:id', validate(updatePlace.validationScheme), updatePlace);
-	router.delete('/:id', validate(deletePlace.validationScheme), deletePlace);
+  router.get('/', validate(getAllPlaces.validationScheme), getAllPlaces);
+  router.post('/', validate(createPlace.validationScheme), createPlace);
+  router.get('/:id', validate(getPlaceById.validationScheme), getPlaceById);
+  router.put('/:id', validate(updatePlace.validationScheme), updatePlace);
+  router.delete('/:id', validate(deletePlace.validationScheme), deletePlace);
 
-	app.use(router.routes()).use(router.allowedMethods());
+  app.use(router.routes()).use(router.allowedMethods());
 };
