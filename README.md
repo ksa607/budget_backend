@@ -19,7 +19,9 @@ DATABASE_PORT=3306
 
 ## How to start
 
-Run the app with `yarn start`.
+Run the app in development mode with `yarn start`.
+
+Run the app in production mode with `yarn start:prod`. We then assume all necessary environment variables are set, no `.env` file is ever read with this command.
 
 ## Common errors
 
