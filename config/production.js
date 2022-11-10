@@ -4,7 +4,7 @@ module.exports = {
     disabled: false,
   },
   cors: {
-    origins: ['http://localhost:3000'],
+    origins: ['https://frontendweb-budget.onrender.com'],
     maxAge: 3 * 60 * 60, // 3h in seconds
   },
   database: {
@@ -12,9 +12,5 @@ module.exports = {
     host: 'localhost',
     port: 3306,
     name: 'budget',
-  },
-  cors: {
-    origins: ['http://localhost:3000'],
-    maxAge: 3 * 60 * 60,
   },
 };
