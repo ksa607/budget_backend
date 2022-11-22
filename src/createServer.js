@@ -3,11 +3,24 @@ const config = require('config');
 const koaCors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 const emoji = require('node-emoji');
-const { serializeError } = require('serialize-error');
+const {
+  serializeError
+} = require('serialize-error');
+const swaggerJsdoc = require('swagger-jsdoc');
+const {
+  koaSwagger
+} = require('koa2-swagger-ui');
+const swaggerOptions = require('../swagger.config');
 
-const { initializeLogger, getLogger } = require('./core/logging');
+const {
+  initializeLogger,
+  getLogger
+} = require('./core/logging');
 const ServiceError = require('./core/serviceError');
-const { initializeData, shutdownData } = require('./data');
+const {
+  initializeData,
+  shutdownData
+} = require('./data');
 const installRest = require('./rest');
 
 const NODE_ENV = config.get('env');
@@ -16,11 +29,13 @@ const CORS_MAX_AGE = config.get('cors.maxAge');
 const LOG_LEVEL = config.get('log.level');
 const LOG_DISABLED = config.get('log.disabled');
 
-module.exports = async function createServer () {
+module.exports = async function createServer() {
   initializeLogger({
     level: LOG_LEVEL,
     disabled: LOG_DISABLED,
-    defaultMeta: { NODE_ENV },
+    defaultMeta: {
+      NODE_ENV
+    },
   });
 
   await initializeData();
@@ -45,6 +60,18 @@ module.exports = async function createServer () {
   const logger = getLogger();
 
   app.use(bodyParser());
+
+  const spec = swaggerJsdoc(swaggerOptions);
+  app.use(
+    koaSwagger({
+      routePrefix: '/swagger', // host at /swagger instead of default /docs
+      specPrefix: '/swagger/spec', // route where the spec is returned
+      exposeSpec: true, // expose spec file
+      swaggerOptions: { // passed to SwaggerUi()
+        spec,
+      },
+    }),
+  );
 
   app.use(async (ctx, next) => {
     const logger = getLogger();
@@ -123,11 +150,11 @@ module.exports = async function createServer () {
   installRest(app);
 
   return {
-    getApp(){
+    getApp() {
       return app;
     },
 
-    start(){
+    start() {
       return new Promise((resolve) => {
         const port = config.get('port');
         app.listen(port);
@@ -136,7 +163,7 @@ module.exports = async function createServer () {
       });
     },
 
-    async stop(){
+    async stop() {
       {
         app.removeAllListeners();
         await shutdownData();
