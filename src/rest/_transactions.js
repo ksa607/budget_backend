@@ -6,14 +6,14 @@ const transactionService = require('../service/transaction');
 const validate = require('./_validation.js');
 
 /**
- * @swagger
+ * @openapi
  * tags:
  *   name: Transactions
  *   description: Represents a deposit of withdrawel of a user's budget
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   schemas:
  *     Transaction:
@@ -80,7 +80,7 @@ const validate = require('./_validation.js');
  */
 
 /**
- * @swagger
+ * @openapi
  * /api/transactions:
  *   get:
  *     summary: Get all transactions
@@ -95,17 +95,17 @@ const validate = require('./_validation.js');
  *               $ref: "#/components/schemas/TransactionsList"
  */
 const getAllTransactions = async (ctx) => {
-	ctx.body = await transactionService.getAll();
+  ctx.body = await transactionService.getAll();
 };
 getAllTransactions.validationScheme = {
-	query: Joi.object({
-		limit: Joi.number().positive().max(1000).optional(),
-		offset: Joi.number().min(0).optional(),
-	}).and('limit', 'offset'),
+  query: Joi.object({
+    limit: Joi.number().positive().max(1000).optional(),
+    offset: Joi.number().min(0).optional(),
+  }).and('limit', 'offset'),
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/transactions:
  *   post:
  *     summary: Create a new transaction
@@ -135,25 +135,25 @@ getAllTransactions.validationScheme = {
  *               $ref: '#/components/responses/404NotFound'
  */
 const createTransaction = async (ctx) => {
-	const newTransaction = await transactionService.create({
-		...ctx.request.body,
-		placeId: Number(ctx.request.body.placeId),
-		date: new Date(ctx.request.body.date),
-	});
-	ctx.body = newTransaction;
-	ctx.status = 201;
+  const newTransaction = await transactionService.create({
+    ...ctx.request.body,
+    placeId: Number(ctx.request.body.placeId),
+    date: new Date(ctx.request.body.date),
+  });
+  ctx.body = newTransaction;
+  ctx.status = 201;
 };
 createTransaction.validationScheme = {
-	body: {
-		amount: Joi.number().invalid(0),
-		date: Joi.date().iso().less('now'),
-		placeId: Joi.number().integer().positive(),
-		user: Joi.string(),
-	},
+  body: {
+    amount: Joi.number().invalid(0),
+    date: Joi.date().iso().less('now'),
+    placeId: Joi.number().integer().positive(),
+    user: Joi.string(),
+  },
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/transactions/{id}:
  *   get:
  *     summary: Get a single transaction
@@ -176,16 +176,16 @@ createTransaction.validationScheme = {
  *               $ref: '#/components/responses/404NotFound'
  */
 const getTransactionById = async (ctx) => {
-	ctx.body = await transactionService.getById(ctx.params.id);
+  ctx.body = await transactionService.getById(ctx.params.id);
 };
 getTransactionById.validationScheme = {
-	params: {
-		id: Joi.number().integer().positive(),
-	},
+  params: {
+    id: Joi.number().integer().positive(),
+  },
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/transactions/{id}:
  *   put:
  *     summary: Update an existing transaction
@@ -216,26 +216,26 @@ getTransactionById.validationScheme = {
  *               $ref: '#/components/responses/404NotFound'
  */
 const updateTransaction = async (ctx) => {
-	ctx.body = await transactionService.updateById(ctx.params.id, {
-		...ctx.request.body,
-		placeId: Number(ctx.request.body.placeId),
-		date: new Date(ctx.request.body.date),
-	});
+  ctx.body = await transactionService.updateById(ctx.params.id, {
+    ...ctx.request.body,
+    placeId: Number(ctx.request.body.placeId),
+    date: new Date(ctx.request.body.date),
+  });
 };
 updateTransaction.validationScheme = {
-	params: {
-		id: Joi.number().integer().positive(),
-	},
-	body: {
-		amount: Joi.number().invalid(0),
-		date: Joi.date().iso().less('now'),
-		placeId: Joi.number().integer().positive(),
-		user: Joi.string(),
-	},
+  params: {
+    id: Joi.number().integer().positive(),
+  },
+  body: {
+    amount: Joi.number().invalid(0),
+    date: Joi.date().iso().less('now'),
+    placeId: Joi.number().integer().positive(),
+    user: Joi.string(),
+  },
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/transactions/{id}:
  *   delete:
  *     summary: Delete a transaction
@@ -254,13 +254,13 @@ updateTransaction.validationScheme = {
  *               $ref: '#/components/responses/404NotFound'
  */
 const deleteTransaction = async (ctx) => {
-	await transactionService.deleteById(ctx.params.id);
-	ctx.status = 204;
+  await transactionService.deleteById(ctx.params.id);
+  ctx.status = 204;
 };
 deleteTransaction.validationScheme = {
-	params: {
-		id: Joi.number().integer().positive(),
-	},
+  params: {
+    id: Joi.number().integer().positive(),
+  },
 };
 
 /**
@@ -269,15 +269,15 @@ deleteTransaction.validationScheme = {
  * @param {Router} app - The parent router.
  */
 module.exports = (app) => {
-	const router = new Router({
-		prefix: '/transactions',
-	});
+  const router = new Router({
+    prefix: '/transactions',
+  });
 
-	router.get('/', validate(getAllTransactions.validationScheme), getAllTransactions);
-	router.post('/', validate(createTransaction.validationScheme), createTransaction);
-	router.get('/:id', validate(getTransactionById.validationScheme), getTransactionById);
-	router.put('/:id', validate(updateTransaction.validationScheme), updateTransaction);
-	router.delete('/:id', validate(deleteTransaction.validationScheme), deleteTransaction);
+  router.get('/', validate(getAllTransactions.validationScheme), getAllTransactions);
+  router.post('/', validate(createTransaction.validationScheme), createTransaction);
+  router.get('/:id', validate(getTransactionById.validationScheme), getTransactionById);
+  router.put('/:id', validate(updateTransaction.validationScheme), updateTransaction);
+  router.delete('/:id', validate(deleteTransaction.validationScheme), deleteTransaction);
 
-	app.use(router.routes()).use(router.allowedMethods());
+  app.use(router.routes()).use(router.allowedMethods());
 };

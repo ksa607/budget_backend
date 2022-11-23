@@ -6,14 +6,14 @@ const userService = require('../service/user');
 const validate = require('./_validation');
 
 /**
- * @swagger
+ * @openapi
  * tags:
  *   name: Users
  *   description: Represents a user in the system
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   schemas:
  *     User:
@@ -50,7 +50,7 @@ const validate = require('./_validation');
  */
 
 /**
- * @swagger
+ * @openapi
  * /api/users:
  *   get:
  *     summary: Get all users
@@ -71,7 +71,7 @@ const getAllUsers = async (ctx) => {
 getAllUsers.validationScheme = null;
 
 /**
- * @swagger
+ * @openapi
  * /api/users/{id}:
  *   get:
  *     summary: Get a single user
@@ -110,7 +110,7 @@ getUserById.validationScheme = {
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/users/{id}:
  *   put:
  *     summary: Update an existing user
@@ -152,7 +152,7 @@ updateUserById.validationScheme = {
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/users/{id}:
  *   delete:
  *     summary: Delete a user

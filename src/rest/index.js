@@ -5,7 +5,7 @@ const installHealthRouter = require('./_health');
 const installPlaceRouter = require('./_places');
 const installUserRouter = require('./_user');
 /**
- * @swagger
+ * @openapi
  * components:
  *   schemas:
  *     Base:
@@ -28,7 +28,7 @@ const installUserRouter = require('./_user');
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   parameters:
  *     idParam:
@@ -42,7 +42,7 @@ const installUserRouter = require('./_user');
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   responses:
  *     404NotFound:
@@ -63,13 +63,13 @@ const installUserRouter = require('./_user');
  *               stack:
  *                 type: string
  *                 description: Stack trace (only available if set in configuration)
- *             example:
- *               code: "NOT_FOUND"
- *               details: "No user with the id 123 exists"
+ *           example:
+ *             code: "NOT_FOUND"
+ *             details: "No user with the id 123 exists"
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   responses:
  *     400BadRequest:
@@ -90,13 +90,13 @@ const installUserRouter = require('./_user');
  *               stack:
  *                 type: string
  *                 description: Stack trace (only available if set in configuration)
- *             example:
- *               code: "VALIDATION_FAILED"
- *               details: "You can only choose a rating between 1 and 5"
+ *           example:
+ *             code: "VALIDATION_FAILED"
+ *             details: "You can only choose a rating between 1 and 5"
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   responses:
  *     403Forbidden:
@@ -117,9 +117,9 @@ const installUserRouter = require('./_user');
  *               stack:
  *                 type: string
  *                 description: Stack trace (only available if set in configuration)
- *             example:
- *               code: "FORBIDDEN"
- *               details: "You are not allowed to view this user's information"
+ *           example:
+ *             code: "FORBIDDEN"
+ *             details: "You are not allowed to view this user's information"
  */
 /**
  * Install all routes in the given Koa application.

@@ -5,14 +5,14 @@ const placeService = require('../service/place');
 
 const validate = require('./_validation.js');
 /**
- * @swagger
+ * @openapi
  * tags:
  *   name: Places
  *   description: Represents an income source or a expense item
  */
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   schemas:
  *     Place:
@@ -68,7 +68,7 @@ const validate = require('./_validation.js');
  */
 
 /**
- * @swagger
+ * @openapi
  * /api/places:
  *   get:
  *     summary: Get all places
@@ -100,7 +100,7 @@ createPlace.validationScheme = {
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/places/{id}:
  *   get:
  *     summary: Get a single place
@@ -132,7 +132,7 @@ getPlaceById.validationScheme = {
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/places/{id}:
  *   put:
  *     summary: Update an existing place
@@ -176,7 +176,7 @@ updatePlace.validationScheme = {
 };
 
 /**
- * @swagger
+ * @openapi
  * /api/places/{id}:
  *   delete:
  *     summary: Delete a place
