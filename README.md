@@ -23,6 +23,12 @@ Run the app in development mode with `yarn start`.
 
 Run the app in production mode with `yarn start:prod`. We then assume all necessary environment variables are set, no `.env` file is ever read with this command.
 
+## How to test
+
+Create a `.env.test` with a simalar configuration as above (use another database).
+
+Run the tests with `yarn test`. To get coverage run `yarn test:coverage`.
+
 ## Common errors
 
 * Modules not found errors, try this and run again:
