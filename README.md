@@ -25,7 +25,7 @@ Run the app in production mode with `yarn start:prod`. We then assume all necess
 
 ## How to test
 
-Create a `.env.test` with a simalar configuration as above (use another database).
+Create a `.env.test` with a similar configuration as above (use another database).
 
 Run the tests with `yarn test`. To get coverage run `yarn test:coverage`.
 
