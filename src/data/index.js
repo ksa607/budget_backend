@@ -6,7 +6,7 @@ const knex = require('knex');
 const { getLogger } = require('../core/logging');
 
 const NODE_ENV = config.get('env');
-const isDevelopment = NODE_ENV === 'development';
+const isDevelopment = NODE_ENV === 'production';
 
 const DATABASE_CLIENT = config.get('database.client');
 const DATABASE_NAME = config.get('database.name');
