@@ -5,7 +5,7 @@ module.exports = {
     disabled: false,
   },
   cors: {
-    origins: ['https://budget-frontend-karine.onrender.com'],
+    origins: ['https://localhost:3000'],
     maxAge: 3 * 60 * 60, // 3h in seconds
   },
   database: {
